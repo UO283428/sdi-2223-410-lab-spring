@@ -1,7 +1,7 @@
-package com.example.notaneditor.controllers;
+package com.uniovi.notaneditor.controllers;
 
-import com.example.notaneditor.entities.Mark;
-import com.example.notaneditor.services.MarksService;
+import com.uniovi.notaneditor.entities.Mark;
+import com.uniovi.notaneditor.services.MarksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

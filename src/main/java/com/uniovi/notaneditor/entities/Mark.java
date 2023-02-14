@@ -1,9 +1,14 @@
-package com.example.notaneditor.entities;
+package com.uniovi.notaneditor.entities;
+import javax.persistence.*;
 
+@Entity
 public class Mark {
+    @Id
+    @GeneratedValue
     private Long id;
     private String description;
     private Double score;
+
 
     public Mark() {
     }

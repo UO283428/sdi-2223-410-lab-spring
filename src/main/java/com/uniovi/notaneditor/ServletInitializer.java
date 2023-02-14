@@ -1,4 +1,4 @@
-package com.example.notaneditor;
+package com.uniovi.notaneditor;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
