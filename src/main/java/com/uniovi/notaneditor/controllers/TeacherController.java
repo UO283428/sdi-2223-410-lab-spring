@@ -28,6 +28,12 @@ public class TeacherController {
         return "redirect:/teacher/list";
     }
 
+    @RequestMapping(value = "/teacher/add")
+    public String getTeacher() {
+        return "teacher/add";
+    }
+
+
     @RequestMapping("/teacher/details/{id}")
     public String getDetail(Model model, @PathVariable Long id) {
         model.addAttribute("teacher", teacherService.getTeacher(id));

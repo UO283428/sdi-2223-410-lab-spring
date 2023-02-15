@@ -1,35 +1,32 @@
 package com.uniovi.notaneditor.services;
 
 import com.uniovi.notaneditor.entities.Teacher;
+import com.uniovi.notaneditor.repositories.TeacherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class TeacherService {
 
-    private List<Teacher> teacherList = new LinkedList<>();
-    @PostConstruct
-    public void init() {
-        teacherList.add(new Teacher(1L, "1111", "name1", "surname1", "cat1"));
-        teacherList.add(new Teacher(2L, "2222", "name2", "surname2", "cat2"));
-    }
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     public List<Teacher> getTeachers() {
-        return List.copyOf(teacherList);
+        List<Teacher> teachers = new ArrayList<>();
+        teacherRepository.findAll().forEach(teachers::add);
+        return teachers;
     }
 
     public Teacher getTeacher(Long id) {
-        return teacherList.stream()
-                .filter(teacher -> teacher.getId().equals(id)).findFirst().get();
+        return teacherRepository.findById(id).get();
     }
     public void addTeacher(Teacher teacher) {
-        teacherList.add(teacher);
+        teacherRepository.save(teacher);
     }
     public void deleteTeacher(Long id) {
-        teacherList.removeIf(teacher -> teacher.getId().equals(id));
+        teacherRepository.deleteById(id);
     }
 }
