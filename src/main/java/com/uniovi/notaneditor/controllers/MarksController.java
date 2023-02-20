@@ -13,6 +13,11 @@ public class MarksController {
     @Autowired //Inyectar el servicio
     private MarksService marksService;
 
+    @RequestMapping("/mark/list/update")
+    public String updateList(Model model){
+        model.addAttribute("markList", marksService.getMarks() );
+        return "mark/list :: tableMarks";
+    }
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
