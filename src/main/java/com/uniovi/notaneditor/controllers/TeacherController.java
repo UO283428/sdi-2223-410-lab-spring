@@ -17,46 +17,45 @@ public class TeacherController {
     private TeacherService teacherService;
 
 
-    @RequestMapping("/teacher/list")
+    @RequestMapping("/professor/list")
     public String getList(Model model) {
         model.addAttribute("teacherList", teacherService.getTeachers());
-        return "teacher/list";
+        return "professor/list";
     }
 
-    @RequestMapping(value = "/teacher/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/professor/add", method = RequestMethod.POST)
     public String setTeacher(@ModelAttribute Teacher teacher) {
         teacherService.addTeacher(teacher);
-        return "redirect:/teacher/list";
+        return "redirect:/professor/list";
     }
 
-    @RequestMapping(value = "/teacher/add")
+    @RequestMapping(value = "/professor/add")
     public String getTeacher() {
-        return "teacher/add";
+        return "professor/add";
     }
 
 
-    @RequestMapping("/teacher/details/{id}")
+    @RequestMapping("/professor/details/{id}")
     public String getDetail(Model model, @PathVariable Long id) {
         model.addAttribute("teacher", teacherService.getTeacher(id));
-        return "teacher/details";
+        return "professor/details";
     }
 
-    @RequestMapping("/teacher/delete/{id}")
+    @RequestMapping("/professor/delete/{id}")
     public String deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacher(id);
-        return "redirect:/teacher/list";
+        return "redirect:/professor/list";
     }
 
-    @RequestMapping(value = "/teacher/edit/{id}")
+    @RequestMapping(value = "/professor/edit/{id}")
     public String getEdit(Model model, @PathVariable Long id) {
         model.addAttribute("teacher", teacherService.getTeacher(id));
-        return "teacher/edit";
+        return "professor/edit";
     }
 
-    @RequestMapping(value="/teacher/edit/", method=RequestMethod.POST)
-    public String setEdit(@ModelAttribute Teacher teacher, @RequestParam Long id){
-        mark.setId(id);
-        marksService.addMark(mark);
-        return "redirect:/teacher/details/"+id;
+    @RequestMapping(value="/professor/edit/{id}", method=RequestMethod.POST)
+    public String setEdit(@ModelAttribute Teacher teacher){
+        teacherService.addTeacher(teacher);
+        return "redirect:/professor/details/"+ teacher.getId();
     }
 }
