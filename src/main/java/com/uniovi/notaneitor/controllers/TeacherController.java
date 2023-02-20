@@ -1,14 +1,11 @@
-package com.uniovi.notaneditor.controllers;
+package com.uniovi.notaneitor.controllers;
 
-import com.uniovi.notaneditor.entities.Mark;
-import com.uniovi.notaneditor.entities.Teacher;
-import com.uniovi.notaneditor.services.TeacherService;
+import com.uniovi.notaneitor.entities.Teacher;
+import com.uniovi.notaneitor.services.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class TeacherController {

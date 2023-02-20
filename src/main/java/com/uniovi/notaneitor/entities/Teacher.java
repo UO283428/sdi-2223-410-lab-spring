@@ -1,4 +1,4 @@
-package com.uniovi.notaneditor.entities;
+package com.uniovi.notaneitor.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

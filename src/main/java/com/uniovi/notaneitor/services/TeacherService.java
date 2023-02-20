@@ -1,7 +1,7 @@
-package com.uniovi.notaneditor.services;
+package com.uniovi.notaneitor.services;
 
-import com.uniovi.notaneditor.entities.Teacher;
-import com.uniovi.notaneditor.repositories.TeacherRepository;
+import com.uniovi.notaneitor.entities.Teacher;
+import com.uniovi.notaneitor.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
