@@ -5,12 +5,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.uniovi.notaneitor.entities.*;
 import com.uniovi.notaneitor.services.UsersService;
+import com.uniovi.notaneitor.validators.SignUpFormValidator;
 @Controller
 public class UsersController {
     @Autowired
+    private SignUpFormValidator signUpFormValidator;
+   @Autowired
     private UsersService usersService;
     @Autowired
     private SecurityService securityService;
@@ -50,12 +55,7 @@ public class UsersController {
         usersService.addUser(user);
         return "redirect:/user/details/" + id;
     }
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup(@ModelAttribute("user") User user, Model model) {
-        usersService.addUser(user);
-        securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
-        return "redirect:home";
-    }
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "login";
@@ -68,5 +68,24 @@ public class UsersController {
         model.addAttribute("markList", activeUser.getMarks());
         return "home";
     }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String signup(Model model) {
+        model.addAttribute("user", new User());
+        return "signup";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(@Validated User user, BindingResult result) {
+        signUpFormValidator.validate(user, result);
+        if(result.hasErrors()){
+            return "signup";
+        }
+
+        usersService.addUser(user);
+        securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
+        return "redirect:home";
+    }
+
 
 }
