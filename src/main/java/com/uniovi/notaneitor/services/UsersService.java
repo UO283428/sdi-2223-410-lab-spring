@@ -30,6 +30,16 @@ public class UsersService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         usersRepository.save(user);
     }
+    public void modifyUser(User user) {
+        Optional<User> prevUser = usersRepository.findById(user.getId());
+        if (prevUser.isEmpty())
+            throw new RuntimeException("user didn't exist");
+        User previousUser = prevUser.get();
+        user.setPassword(previousUser.getPassword());
+        user.setPasswordConfirm(previousUser.getPasswordConfirm());
+        user.setRole(previousUser.getRole());
+        usersRepository.save(user);
+    }
     public User getUserByDni(String dni) {
         return usersRepository.findByDni(dni);
     }
