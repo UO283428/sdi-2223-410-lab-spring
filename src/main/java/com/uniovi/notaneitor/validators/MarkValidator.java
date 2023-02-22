@@ -23,7 +23,7 @@ public class MarkValidator implements Validator {
         if (mark.getScore() < 0 || mark.getScore() > 10) {
             errors.rejectValue("score", "Error.addMark.score");}
 
-        if (mark.getDescription().length() < 5 || mark.getDescription().length() > 24) {
+        if (mark.getDescription().length() < 20) {
             errors.rejectValue("description", "Error.addMark.description.length");}
     }
 }

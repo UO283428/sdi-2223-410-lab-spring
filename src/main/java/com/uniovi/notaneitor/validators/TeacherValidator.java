@@ -20,10 +20,10 @@ public class TeacherValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "surname", "Error.empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "category", "Error.empty");
 
-        if (teacher.getDni().length() < 5 || teacher.getDni().length() > 24) {
+        if (teacher.getDni().length() < 9 | teacher.getDni().length() >= 10) {
             errors.rejectValue("dni", "Error.addTeacher.dni.length");}
 
-        if (!Character.isDigit(teacher.getDni().charAt(teacher.getDni().length()-1))) {
+        if (!Character.isAlphabetic(teacher.getDni().charAt(teacher.getDni().length()-1))) {
             errors.rejectValue("dni", "Error.addTeacher.dni.number");}
 
         if (teacherService.getTeacherByDni(teacher.getDni()) != null) {
