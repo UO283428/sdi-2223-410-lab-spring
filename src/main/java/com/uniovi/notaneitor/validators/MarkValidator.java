@@ -1,4 +1,5 @@
 package com.uniovi.notaneitor.validators;
+import com.uniovi.notaneitor.entities.Mark;
 import com.uniovi.notaneitor.entities.Teacher;
 import com.uniovi.notaneitor.services.MarksService;
 import com.uniovi.notaneitor.services.TeacherService;
@@ -15,19 +16,14 @@ public class MarkValidator implements Validator {
     }
     @Override
     public void validate(Object target, Errors errors) {
-        Teacher teacher = (Teacher) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dni", "Error.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Error.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "surname", "Error.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "category", "Error.empty");
+        Mark mark = (Mark) target;
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "Error.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "score", "Error.empty");
 
-        if (teacher.getDni().length() < 5 || teacher.getDni().length() > 24) {
-            errors.rejectValue("dni", "Error.addTeacher.dni.length");}
+        if (mark.getScore() < 0 || mark.getScore() > 10) {
+            errors.rejectValue("score", "Error.addMark.score");}
 
-        if (!Character.isDigit(teacher.getDni().charAt(teacher.getDni().length()-1))) {
-            errors.rejectValue("dni", "Error.addTeacher.dni.number");}
-
-        if (teacherService.getTeacherByDni(teacher.getDni()) != null) {
-            errors.rejectValue("dni", "Error.addTeacher.dni.duplicate");}
+        if (mark.getDescription().length() < 5 || mark.getDescription().length() > 24) {
+            errors.rejectValue("description", "Error.addMark.description.length");}
     }
 }
