@@ -1,10 +1,14 @@
 package com.uniovi.notaneitor.controllers;
 
 import com.uniovi.notaneitor.entities.Teacher;
+import com.uniovi.notaneitor.entities.User;
 import com.uniovi.notaneitor.services.TeacherService;
+import com.uniovi.notaneitor.validators.TeacherValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -13,6 +17,8 @@ public class TeacherController {
     @Autowired //Inyectar el servicio
     private TeacherService teacherService;
 
+    @Autowired
+    private TeacherValidator teacherValidator;
 
     @RequestMapping("/professor/list")
     public String getList(Model model) {
@@ -21,13 +27,19 @@ public class TeacherController {
     }
 
     @RequestMapping(value = "/professor/add", method = RequestMethod.POST)
-    public String setTeacher(@ModelAttribute Teacher teacher) {
+    public String setTeacher(@Validated Teacher teacher, BindingResult result) {
+        teacherValidator.validate(teacher, result);
+        if (result.hasErrors()){
+            return "/professor/add";
+        }
+
         teacherService.addTeacher(teacher);
         return "redirect:/professor/list";
     }
 
     @RequestMapping(value = "/professor/add")
-    public String getTeacher() {
+    public String getTeacher(Model model) {
+        model.addAttribute("teacher", new Teacher());
         return "professor/add";
     }
 
