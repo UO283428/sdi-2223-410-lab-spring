@@ -1,18 +1,25 @@
 package com.uniovi.notaneitor.controllers;
+
+import com.uniovi.notaneitor.entities.User;
+import com.uniovi.notaneitor.services.RolesService;
 import com.uniovi.notaneitor.services.SecurityService;
-import org.springframework.beans.factory.annotation.*;
+import com.uniovi.notaneitor.services.UsersService;
+import com.uniovi.notaneitor.validators.SignUpFormValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.uniovi.notaneitor.entities.*;
-import com.uniovi.notaneitor.services.UsersService;
-import com.uniovi.notaneitor.validators.SignUpFormValidator;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class UsersController {
+    @Autowired
+    private RolesService rolesService;
     @Autowired
     private SignUpFormValidator signUpFormValidator;
    @Autowired
@@ -32,7 +39,7 @@ public class UsersController {
     }
     @RequestMapping(value = "/user/add")
     public String getUser(Model model) {
-        model.addAttribute("usersList", usersService.getUsers());
+        model.addAttribute("rolesList", rolesService.getRoles());
         return "user/add";
     }
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
@@ -84,14 +91,13 @@ public class UsersController {
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signup(@Validated User user, BindingResult result) {
         signUpFormValidator.validate(user, result);
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return "signup";
         }
-
+        user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
         securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
     }
-
 
 }
