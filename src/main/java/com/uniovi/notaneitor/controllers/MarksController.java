@@ -1,6 +1,7 @@
 package com.uniovi.notaneitor.controllers;
 
 import com.uniovi.notaneitor.entities.Mark;
+import com.uniovi.notaneitor.entities.User;
 import com.uniovi.notaneitor.services.MarksService;
 import com.uniovi.notaneitor.services.UsersService;
 import com.uniovi.notaneitor.validators.MarkValidator;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 @Controller
 public class MarksController {
@@ -28,16 +30,21 @@ public class MarksController {
     private MarkValidator markValidator;
 
     @RequestMapping("/mark/list/update")
-    public String updateList(Model model){
-        model.addAttribute("markList", marksService.getMarks() );
+    public String updateList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("markList", marksService.getMarksForUser(user));
         return "mark/list :: tableMarks";
     }
 
     @RequestMapping("/mark/list")
-    public String getList(Model model) {
-        model.addAttribute("markList", marksService.getMarks());
+    public String getList(Model model, Principal principal){
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("markList", marksService.getMarksForUser(user) );
         return "mark/list";
     }
+
 
 
     @RequestMapping("/mark/details/{id}")
