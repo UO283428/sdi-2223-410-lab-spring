@@ -1,7 +1,6 @@
 package com.uniovi.notaneitor.controllers;
 
 import com.uniovi.notaneitor.entities.Mark;
-import com.uniovi.notaneitor.entities.Teacher;
 import com.uniovi.notaneitor.services.MarksService;
 import com.uniovi.notaneitor.services.UsersService;
 import com.uniovi.notaneitor.validators.MarkValidator;
@@ -10,11 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class MarksController {
 
+    @Autowired
+    private HttpSession httpSession;
     @Autowired //Inyectar el servicio
     private MarksService marksService;
     @Autowired
@@ -30,6 +38,11 @@ public class MarksController {
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
+        Set<Mark> consultedList= (Set<Mark>) httpSession.getAttribute("consultedList");
+        if ( consultedList == null ) {
+            consultedList = new HashSet<Mark>();
+        }
+        model.addAttribute("consultedList", consultedList);
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
