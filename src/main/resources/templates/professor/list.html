@@ -27,9 +27,9 @@
                 <td th:text="${teacher.name}">10</td>
                 <td th:text="${teacher.surname}">10</td>
                 <td th:text="${teacher.category}">10</td>
-                <td><a th:href="${'/professor/details/' + teacher.id}">detalles</a></td>
-                <td><a th:href="${'/professor/edit/' + teacher.id}">modificar</a></td>
-                <td><a th:href="${'/professor/delete/' + teacher.id}">eliminar</a></td>
+                <td><a th:href="${'/professor/details/' + teacher.id}" sec:authorize="hasRole('ROLE_ADMIN') || hasRole('ROLE_PROFESSOR')">detalles</a></td>
+                <td><a th:href="${'/professor/edit/' + teacher.id}" sec:authorize="hasRole('ROLE_ADMIN')">modificar</a></td>
+                <td><a th:href="${'/professor/delete/' + teacher.id}" sec:authorize="hasRole('ROLE_ADMIN')">eliminar</a></td>
             </tr>
             </tbody>
         </table>
