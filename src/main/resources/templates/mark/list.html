@@ -30,7 +30,7 @@
         /*]]>*/
     </script>
     <div class="table-responsive">
-    <table th:replace="fragments/marksList"></table>
+    <table class="table table-hover" th:replace="fragments/marksList" id="tableMarks" th:fragment="tableMarks"></table>
     </div>
     <footer th:replace="fragments/pagination"/>
     <div th:if="${#lists.isEmpty(markList)}"> No marks </div>
