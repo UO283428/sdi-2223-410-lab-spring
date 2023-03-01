@@ -1,21 +1,27 @@
 package com.uniovi.notaneitor.controllers;
 
+import com.uniovi.notaneitor.entities.Mark;
 import com.uniovi.notaneitor.entities.User;
+import com.uniovi.notaneitor.services.MarksService;
 import com.uniovi.notaneitor.services.RolesService;
 import com.uniovi.notaneitor.services.SecurityService;
 import com.uniovi.notaneitor.services.UsersService;
 import com.uniovi.notaneitor.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.LinkedList;
+
 @Controller
 public class UsersController {
     @Autowired
@@ -26,6 +32,9 @@ public class UsersController {
     private UsersService usersService;
     @Autowired
     private SecurityService securityService;
+
+    @Autowired //Inyectar el servicio
+    private MarksService marksService;
 
     @RequestMapping("/user/list/update")
     public String updateList(Model model){
@@ -74,13 +83,30 @@ public class UsersController {
         return "login";
     }
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String dni = auth.getName();
-        User activeUser = usersService.getUserByDni(dni);
-        model.addAttribute("markList", activeUser.getMarks());
-        return "home";
+    public String getList(Model model, Pageable pageable, Principal principal,
+                          @RequestParam(value="", required=false) String searchText) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        Page<Mark> marks = new PageImpl<Mark>(new LinkedList<Mark>());
+        if (searchText != null && !searchText.isEmpty()) {
+            marks = marksService.searchMarksByDescriptionAndNameForUser(pageable, searchText, user);
+        } else {
+            marks = marksService.getMarksForUser(pageable, user);
+        }
+
+        model.addAttribute("markList", marks.getContent());
+        model.addAttribute("page", marks);
+
+        return "/home";
     }
+
+//    public String home(Model model) {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String dni = auth.getName();
+//        User activeUser = usersService.getUserByDni(dni);
+//        model.addAttribute("markList", activeUser.getMarks());
+//        return "home";
+//    }
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signup(Model model) {
